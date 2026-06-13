@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>订单手机号记录</title>
+<style>
+*{box-sizing:border-box;font-family:system-ui,Microsoft Yahei,sans-serif;margin:0;padding:0;}
+body{background:#f5f7fa;padding:10px;}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;}
+th,td{padding:12px 8px;text-align:left;border-bottom:1px #eee solid;font-size:14px;word-break:break-all;}
+th{background:#f5f7fa;color:#333;}
+.tel{color:#4096ff;text-decoration:none;}
+.status-dialed{color:#4096ff;font-weight:bold;cursor:pointer;}
+.status-undialed{color:#999;cursor:pointer;}
+/* 强制四列适配手机屏幕 */
+th:nth-child(1), td:nth-child(1) { width: 8%; }
+th:nth-child(2), td:nth-child(2) { width: 35%; }
+th:nth-child(3), td:nth-child(3) { width: 32%; }
+th:nth-child(4), td:nth-child(4) { width: 25%; }
+</style>
+</head>
+<body>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>订单号</th>
+<th>手机号</th>
+<th>拨打标记</th>
+</tr>
+</thead>
+<tbody id="listBody">
+<tr data-id="1">
+<td>1</td>
+<td>6926110922467671796</td>
+<td><a class="tel" onclick="autoMark(1)" href="tel:15780942883,4733">15780942883转4733</a></td>
+<td class="flag"><span class="status-undialed" onclick="toggleMark(1)">□ 未拨打</span></td>
+</tr>
+<tr data-id="2">
+<td>2</td>
+<td>6952615654675912441</td>
+<td><a class="tel" onclick="autoMark(2)" href="tel:13601488746,3802">13601488746转3802</a></td>
+<td class="flag"><span class="status-undialed" onclick="toggleMark(2)">□ 未拨打</span></td>
+</tr>
+<tr data-id="3">
+<td>3</td>
+<td>6926135336629861979</td>
+<td><a class="tel" onclick="autoMark(3)" href="tel:15782117096,8263">15782117096转8263</a></td>
+<td class="flag"><span class="status-undialed" onclick="toggleMark(3)">□ 未拨打</span></td>
+</tr>
+<tr data-id="4">
+<td>4</td>
+<td>6926135424008289605</td>
+<td><a class="tel" onclick="autoMark(4)" href="tel:15789786761,4495">15789786761转4495</a></td>
+<td class="flag"><span class="status-undialed" onclick="toggleMark(4)">□ 未拨打</span></td>
+</tr>
+<tr data-id="5">
+<td>5</td>
+<td>6926135420557229635</td>
+<td><a class="tel" onclick="autoMark(5)" href="tel:15781011530,5709">15781011530转5709</a></td>
+<td class="flag"><span class="status-undialed" onclick="toggleMark(5)">□ 未拨打</span></td>
+</tr>
+<tr data-id="6">
+<td>6</td>
+<td>6952647541069256594</td>
+<td><a class="tel" onclick="autoMark(6)" href="tel:15784069211,4298">15784069211转4298</a></td>
+<td class="flag"><span class="status-undialed" onclick="toggleMark(6)">□ 未拨打</span></td>
+</tr>
+<tr data-id="7">
+<td>7</td>
+<td>6926126043154578772</td>
+<td><a class="tel" onclick="autoMark(7)" href="tel:17804455192,1927">17804455192转1927</a></td>
+<td class="flag"><span class="status-undialed" onclick="toggleMark(7)">□ 未拨打</span></td>
+</tr>
+<tr data-id="8">
+<td>8</td>
+<td>6952645156831368877</td>
+<td><a class="tel" onclick="autoMark(8)" href="tel:17834572203,0851">17834572203转0851</a></td>
+<td class="flag"><span class="status-undialed" onclick="toggleMark(8)">□ 未拨打</span></td>
+</tr>
+<tr data-id="9">
+<td>9</td>
+<td>6952640617662781203</td>
+<td><a class="tel" onclick="autoMark(9)" href="tel:15782717922,4924">15782717922转4924</a></td>
+<td class="flag"><span class="status-undialed" onclick="toggleMark(9)">□ 未拨打</span></td>
+</tr>
+<tr data-id="10">
+<td>10</td>
+<td>6926139591260405166</td>
+<td><a class="tel" onclick="autoMark(10)" href="tel:15782103514,9831">15782103514转9831</a></td>
+<td class="flag"><span class="status-undialed" onclick="toggleMark(10)">□ 未拨打</span></td>
+</tr>
+<tr data-id="11">
+<td>11</td>
+<td>6952620841203078703</td>
+<td><a class="tel" onclick="autoMark(11)" href="tel:15789804566,2844">15789804566转2844</a></td>
+<td class="flag"><span class="status-undialed" onclick="toggleMark(11)">□ 未拨打</span></td>
+</tr>
+</tbody>
+</table>
+
+<script>
+let record = JSON.parse(localStorage.getItem('telRecord')) || [];
+window.onload = function(){renderAll();}
+
+// 点击号码自动标记
+function autoMark(id){
+    if(!record.includes(id)){
+        record.push(id);
+        localStorage.setItem('telRecord', JSON.stringify(record));
+    }
+    renderAll();
+}
+
+// 手动点击标记切换
+function toggleMark(id){
+    if(record.includes(id)){
+        record = record.filter(item => item !== id);
+    }else{
+        record.push(id);
+    }
+    localStorage.setItem('telRecord', JSON.stringify(record));
+    renderAll();
+}
+
+// 渲染所有标记
+function renderAll(){
+    document.querySelectorAll('#listBody tr').forEach(tr=>{
+        let id = parseInt(tr.dataset.id);
+        let flagSpan = tr.querySelector('.flag span');
+        if(record.includes(id)){
+            flagSpan.className = 'status-dialed';
+            flagSpan.innerText = '☑ 已拨打';
+        }else{
+            flagSpan.className = 'status-undialed';
+            flagSpan.innerText = '□ 未拨打';
+        }
+    });
+}
+</script>
+</body>
+</html>
